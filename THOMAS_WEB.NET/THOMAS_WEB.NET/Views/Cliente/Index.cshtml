@@ -1,0 +1,95 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model PagedList.IPagedList<ClienteViewModel>
+@{
+    ViewBag.Title = "Index";
+}
+<br />
+<h1>Relação de Contatos</h1>
+<br />
+<hr />
+<div class="teste">
+    @using (Html.BeginForm("Search", "Cliente", FormMethod.Get))
+    {
+        @Html.Label("Nome", "Nome")
+        <input type="text" name="nome" />
+        <input type="submit" name="submit" value="Procurar" class="btn btn-outline-info" />
+    }
+</div>
+<hr />
+<div class="row">
+    <table class="table">
+        <tr>
+            <th>
+
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Logotipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model[0].Email)
+            </th>
+            <th>
+                
+            </th>
+        </tr>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.ActionLink("Editar", "Edit", new { id = item.Id }, new {@class = "btn btn-outline-success btn-sm"}) |
+                    @Html.ActionLink("Detalhes", "Details", new { id = item.Id}, new {@class = "btn btn-outline-primary btn-sm"}) |
+                    @Html.ActionLink("Deletar", "Delete", new { id = item.Id}, new { onclick = "return confirm('Deseja realmente deletar este contato ?');", @class = "btn btn-outline-danger btn-sm" })
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Logotipo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Nome)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.ActionLink("Endereço", "Index", "Endereco", new { id = item.Id  }, new{@class="btn btn-link"})
+                </td>
+            </tr>
+        }
+    </table>
+    <div>
+        Página @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber)
+        de @Model.PageCount
+        @if (Model.HasPreviousPage)
+        {
+            @Html.Raw(" ")
+            ;
+            @Html.ActionLink("Anterior", "Index", new { pagina = Model.PageNumber - 1 }, new{@class="btn btn-outline-primary"})
+        }
+        else
+        {
+            @:<
+            @Html.Raw(" ")
+            ;
+            @:< Anterior
+        }
+        @if (Model.HasNextPage)
+        {
+            @Html.ActionLink("Próxima", "Index", new { pagina = Model.PageNumber + 1 }, new{@class="btn btn-outline-info"})
+            @Html.Raw(" ")
+            ;
+        }
+        else
+        {
+            @:Próxima >
+            @Html.Raw(" ")
+            @:>
+        }
+    </div>
+</div>
+<hr />
+<div class="teste1">
+    <a type="button" asp-action="Create" class="btn btn-outline-secondary">Novo Contato</a>
+</div>
